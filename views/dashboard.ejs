@@ -1,0 +1,569 @@
+<%- include('partials/_header'); %>
+
+	<%- include('partials/_navigation'); %>
+
+		<% if(user) { %>
+
+			<% if(user.role==='student' ) { %>
+
+				<div class="all-title-box">
+					<div class="container text-center">
+						<h1>
+							<%= user.name %><span class="m_1">Öğrenci</span>
+						</h1>
+					</div>
+				</div>
+
+				<div id="overviews" class="section wb">
+					<div class="container">
+						<div class="row">
+							<div class="col-lg-12 blog-post-single">
+								<div class="blog-author">
+									<div class="author-bio">
+										<h3 class="author_name"> <a href="/courses"> Stajlarım</a>: <%= user.name %> Tarafından Başvurulan Stajlar</h3>
+
+									</div>
+								</div>
+
+							</div><!-- end col -->
+						</div><!-- end row -->
+						<div class="row mt-5">
+
+							<% for (let i=0; i< user.courses.length; i++) { %>
+
+							<div class="col-lg-6 col-md-6 col-12">
+								<div class="course-item mb-5">
+									<div class="image-blog">
+										<img src="/images/blog_1.jpg" alt="" class="img-fluid">
+									</div>
+									<div class="course-br">
+										<div class="course-title">
+											<h2><a href="/courses/<%= user.courses[i].slug %>" title=""><%= user.courses[i].name %> </a></h2>
+										</div>
+										<!-- <div class="course-desc">
+											<p><%= user.courses[i].description %> </p>
+											<form method="POST" action="/courses/release">
+												<input type="hidden" name="course_id" value="<%= user.courses[i]._id %>">
+												<button class="btn btn-lg btn-danger text-white"
+												onclick="return confirm(' <%= user.courses[i].name %> Başvurunu iptal etmek istediğinden emin misin? ')"><span>İptal Et</span></button>
+											</form> -->
+											<!-- <div id="stajDefteri" class="section wb">
+												<div class="container">
+												  <div class="row">
+													<div class="col-lg-12 col-md-12 col-12">													  
+													  <form action="/staj-defteri/upload" method="POST" enctype="multipart/form-data">
+														<div class="form-group">
+														  
+														</div>
+														<button type="submit" class="btn btn-lg btn-primary" <input type="file" class="form-control-file" id="stajDefteriFile" name="stajDefteriFile">Yükle</button>
+													  </form>
+													</div>
+												  </div>
+												</div>
+											  </div> -->
+
+											  <div class="course-desc">
+												<p><%= user.courses[i].description %> </p>
+												<div>
+												<div class="d-flex align-items-center">
+												  <form method="POST" action="/courses/release" class="mr-3">
+													<input type="hidden" name="course_id" value="<%= user.courses[i]._id %>">
+													<button style="font-size: medium;" class="btn btn-lg btn-danger text-white mt-1 ml-4"
+															onclick="return confirm(' <%= user.courses[i].name %> Başvurunu iptal etmek istediğinden emin misin? ')">
+													  <span>İptal Et</span>
+													</button>
+												  </form>
+												
+												
+												<!-- <form action="/courses/upload" method="POST" enctype="multipart/form-data" class="d-inline">
+													<input type="file" class="form-control-file" id="stajDefteriFile" name="stajDefteriFile">
+													<button type="submit" class="btn btn-lg btn-primary mt-1 ">
+													  <span>Yükle</span>
+													</button>
+													<input type="file" class="form-control-file d-none" id="stajDefteriFile" name="stajDefteriFile">
+												</form> -->
+
+												 <div class="clearfix">
+													<ul style="list-style-type: none;">
+														<li style="float: left; width: auto;">
+															<!--<form action="/inbox" method="POST" enctype="multipart/form-data">-->
+															<form action="/inbox" method="POST" enctype="multipart/form-data"></form>
+																<input style=" width:250px ; font-size:medium" class="btn btn-lg btn-primary text-white mr-2 ml-5"
+																data-toggle="modal" type="file" name="file" accept=".txt, .pdf, .docx">
+																<button style=" width:250px ; font-size:medium" class="btn btn-lg btn-success text-white mr-2 mt-1 ml-5"
+																data-toggle="modal" type="submit">Dosya Yükle</button>
+															</form>
+														</li>
+														
+															<li style="float: left;">
+																<button style="width: 175px; font-size: medium;" class="btn btn-lg btn-warning text-white mt-1 ml-5"
+																data-toggle="modal" 
+																><span>Güncelle</span></button></li>
+	
+
+														<li style="float: left;"><a style="width: 72px; font-size: medium;" href="" onclick=""class="btn btn-lg btn-danger text-white ml-1 mt-1"><span>Sil</span></a></li>
+													</ul>
+												</div>
+												
+												
+												</div>
+											  </div>
+										</div>
+										
+
+									</div>
+								</div>
+							</div><!-- end col -->
+
+							<% } %>	
+
+
+						</div><!-- end row -->
+					</div><!-- end container -->
+				</div><!-- end section -->
+
+			<% } %>
+
+			<% if(user.role==='teacher' ) { %>
+
+			<div class="all-title-box">
+				<div class="container text-center">
+					<h1>
+						<%= user.name %><span class="m_1">Öğretmen</span>
+					</h1>
+				</div>
+			</div>
+
+			<div id="overviews" class="section wb">
+				<div class="container">
+					<div class="row">
+						<% if (flashMessages) { %>
+
+							<% if (flashMessages.success) { %>
+								<div class="alert alert-success">
+									<%= flashMessages.success %>
+								</div>
+		
+							<% } else if (flashMessages.error) { %>
+								<div class="alert alert-danger">
+									<%= flashMessages.error %>
+								</div>
+							<% } %>
+		
+						<% } %>
+
+						<!-- Modal Button -->
+						<div class="col-lg-12 text-center ">
+							<button class="btn btn-lg btn-warning rounded-0 text-white" href="#"
+								data-toggle="modal" data-target="#addCourse"><span>Staj İlanı Oluştur</span></button>
+						</div>
+
+
+						<div class="col-lg-12 blog-post-single">
+							<div class="blog-author">
+								<div class="author-bio">
+									<h3 class="author_name">Staj İlanını Oluşturan : <%= user.name %></h3>
+								</div>
+							</div>
+
+						</div><!-- end col -->
+					</div><!-- end row -->
+					<div class="row mt-5">
+
+						<% for (let i=0; i< courses.length; i++) { %>
+						<div class="col-lg-6 col-md-6 col-12">
+							<div class="course-item mb-5">
+								<div class="image-blog">
+									<img src="/images/blog_1.jpg" alt="" class="img-fluid">
+								</div>
+								<div class="course-br">
+									<div class="course-title">
+										<h2><a href="/courses/<%= courses[i].slug %>" title=""><%= courses[i].name %></a></h2>
+									</div>
+									<div class="course-desc">
+										<p><%= courses[i].description %> </p>
+									</div>
+									<div class="clearfix">
+										<ul style="list-style-type: none;">
+											<li style="float: left;"><button class="btn btn-primary rounded-0 text-white mr-1"
+												data-toggle="modal" data-target="#updateCourse<%= courses[i]._id %>"
+												><span>İlanı Güncelle</span></button></li>
+											<li style="float: left;"><a href="/courses/<%= courses[i].slug %>?_method=DELETE" 
+												onclick="return confirm('Emin Misin ?')"
+												class="btn btn-danger rounded-0 text-white mr-2"><span>Sil</span></a></li>
+
+												<li style="float: right;"><button class="btn btn-success rounded-0 text-white ml-1"
+													data-toggle="modal" data-target="#evaluateReport<%= courses[i]._id %>"
+												><span>Puan Güncelle</span></button></li>	
+												<li style="float: right;"><button class="btn btn-warning rounded-0 text-white "
+													data-toggle="modal" data-target="#evaluateReport<%= courses[i]._id %>"
+													><span>Defter Puanla</span></button></li>
+												
+										</ul>
+									</div>
+								</div>
+							</div>
+						</div><!-- end col -->
+
+<!-- UPDATE Modal -->
+<div class="modal fade" id="updateCourse<%= courses[i]._id %>" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-body customer-box">
+	<!-- Tab panes -->
+	<div class="tab-content">
+		<div class="tab-pane active" id="Login">
+			<form method="POST" action="/courses/<%= courses[i].slug %>?_method=PUT" class="form-horizontal">
+				<div class="form-group">
+					<div class="col-sm-12">
+						<input type="text" name="name" value="<%= courses[i].name %>" class="form-control"  placeholder="Staj İlanı">
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="col-sm-12">
+						<input type="hidden" name="role" class="form-control"  value="<%= user.role %>">
+					</div>
+				</div>
+
+				<div class="form-group">
+					<div class="col-sm-12">
+						<textarea rows="8" name="description" class="form-control"
+						placeholder="Course Description" required><%= courses[i].description %></textarea>
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="col-sm-12">
+						<select class="form-control" name="category">
+							<% for (let i=0; i< categories.length; i++) { %>
+							<option value="<%= categories[i]._id %>"><%= categories[i].name %></option>
+							<% } %>	
+						</select>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-sm-10">
+						<button type="submit" class="btn btn-light btn-radius btn-brd grd1">
+							Oluştur
+						</button>
+						<button type="submit" class="btn btn-light btn-radius btn-brd grd1"
+							data-dismiss="modal" aria-hidden="true">
+							İptal Et
+						</button>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+</div>
+</div>
+</div>
+
+						<% } %>
+
+					</div><!-- end row -->
+				</div><!-- end container -->
+			</div><!-- end section -->
+
+			<!-- ADD Modal -->
+			<div class="modal fade" id="addCourse" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+			<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+			<div class="modal-content">
+			<div class="modal-body customer-box">
+				<!-- Tab panes -->
+				<div class="tab-content">
+					<div class="tab-pane active" id="Login">
+						<form method="POST" action="/courses" class="form-horizontal">
+							<div class="form-group">
+								<div class="col-sm-12">
+									<input type="text" name="name" class="form-control"  placeholder="İlan Adı">
+								</div>
+							</div>
+							<div class="form-group">
+								<div class="col-sm-12">
+									<input type="hidden" name="role" class="form-control"  value="<%= user.role %>">
+								</div>
+							</div>
+
+							<div class="form-group">
+								<div class="col-sm-12">
+									<textarea rows="8" name="description" class="form-control"
+									placeholder="İlan Hakkında" required></textarea>
+								</div>
+							</div>
+							<div class="form-group">
+								<div class="col-sm-12">
+									<select class="form-control" name="category">
+										<% for (let i=0; i< categories.length; i++) { %>
+										<option value="<%= categories[i]._id %>"><%= categories[i].name %></option>
+										<% } %>	
+									</select>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-sm-10">
+									<button type="submit" class="btn btn-light btn-radius btn-brd grd1">
+										Oluştur
+									</button>
+									<button type="submit" class="btn btn-light btn-radius btn-brd grd1"
+										data-dismiss="modal" aria-hidden="true">
+										İptal Et
+									</button>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+			</div>
+			</div>
+			</div>
+
+			<% } %>
+
+			<% if(user.role==='admin' ) { %>
+
+				<div class="all-title-box">
+					<div class="container text-center">
+						<h1>
+							<%= user.name %><span class="m_1">ADMIN</span>
+						</h1>
+					</div>
+				</div>
+
+				<div id="overviews" class="section wb">
+					<div class="container">
+						<div class="row">
+							<div class="col-lg-12 blog-post-single">
+								<div class="blog-author">
+									
+								</div>
+
+							</div><!-- end col -->
+						</div><!-- end row -->
+
+						<div class="row mt-5">
+							<h2>Kullanıcılar</h2>
+
+							<table class="table">
+								<thead>
+								  <tr>
+									<th scope="col">ID#</th>
+									<th scope="col">Email</th>
+									<th scope="col">Rol</th>
+									<th scope="col">Update Role</th>
+									<th scope="col">Sil</th>
+								  </tr>
+								</thead>
+								<tbody>
+							<% for (let i=0; i< users.length; i++) { %>
+								  <tr>
+									<th scope="row"><%=users[i]._id %></th>
+									<td><%=users[i].email %></td>
+									<td><%=users[i].role %></td>
+									<td>
+										<% if (users[i].role === 'student') { %>
+										  <div class="clearfix">
+											<div style="list-style-type: none;">
+											  <li style="float: left;">
+												<button class="btn btn-primary rounded-0 text-white"
+												  data-toggle="modal" data-target="#updateUserRole<%= users[i]._id %>">
+												  <span>Güncelle</span>
+												</button>
+											  </li>
+											</div>
+										  </div>
+									  
+										  <!-- UPDATE Modal -->
+										  <div class="modal fade" id="updateUserRole<%= users[i]._id %>" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+											<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+											  <div class="modal-content">
+												<div class="modal-body customer-box">
+												  <!-- Tab panes -->
+												  <div class="tab-content">
+													<div class="tab-pane active" id="Login">
+													  <form method="POST" action="/users/<%= users[i]._id %>?_method=PUT" class="form-horizontal">
+														<div class="form-group">
+														  <div class="col-sm-12">
+															<!-- Kullanıcı rolünü güncelleyen input -->
+															<input type="text" name="role" value="<%= users[i].role %>" class="form-control" placeholder="Kullanıcı Rolü">
+														  </div>
+														</div>
+														<div class="col-sm-10">
+														  <button type="submit" class="btn btn-light btn-radius btn-brd grd1">
+															Rolü Güncelle
+														  </button>
+														  <button type="submit" class="btn btn-light btn-radius btn-brd grd1"
+															data-dismiss="modal" aria-hidden="true">
+															İptal Et
+														  </button>
+														</div>
+													  </form>
+													</div>
+												  </div>
+												</div>
+											  </div>
+											</div>
+										  </div>
+										<% } %>
+									  </td>
+									  
+									  
+									<td>
+										 <% if(!(users[i].role=== "admin")) { %>
+
+										<a href="/users/<%= users[i]._id %>?_method=DELETE" 
+										onclick="return confirm('<%= users[i].name %> adlı kullanıcıyı silmek istediğinizden emin misiniz?')"
+										class="btn btn-danger rounded-0 text-white"><span>Sil</span>
+
+										<% } %>
+										</a>
+									</td>
+								  </tr>
+							<% } %>
+								</tbody>
+							  </table>
+
+						</div><!-- end row -->
+
+						
+						<div class="row mt-5">
+							<h2 style="margin-top: 8px;">Kategoriler</h2>
+							<td><button class="btn btn-lg btn-warning rounded-0 text-white" style="margin-left: 30px; margin-bottom: 20px;" href="#"
+								data-toggle="modal" data-target="#addCategory"><span>Yeni Kategori Oluştur</span></button></td>
+								<div class="row" style="margin-left: 25px; margin-bottom: 5px;">
+									<% if (flashMessages) { %>
+			
+										<% if (flashMessages.success) { %>
+											<div class="alert alert-success">
+												<%= flashMessages.success %>
+											</div>
+					
+										<% } else if (flashMessages.error) { %>
+											<div class="alert alert-danger">
+												<%= flashMessages.error %>
+											</div>
+										<% } %>
+					
+									<% } %>
+								</div>		
+							<table class="table">
+								<thead>
+								  <tr>
+									<th scope="col">ID#</th>
+									<th scope="col">İsim</th>
+									<th scope="col">Güncelle</th>									
+									<th scope="col">Sil</th>
+								  </tr>
+								</thead>
+								<tbody>
+							<% for (let i=0; i< categories.length; i++) { %>
+								  <tr>
+									<th scope="row"><%=categories[i]._id %></th>
+									<td><%=categories[i].name %></td>
+									<td>
+
+										
+										<div class="clearfix">
+											<div style="list-style-type: none;">
+												<li style="float: left;"><button class="btn btn-primary rounded-0 text-white"
+													data-toggle="modal" data-target="#updateCategory<%= categories[i].slug %>"
+													><span>Güncelle</span></button></li>
+											</div>
+										</div>
+									
+
+										<!-- UPDATE Modal -->
+<div class="modal fade" id="updateCategory<%= categories[i].slug %>" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+	<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+	<div class="modal-content">
+	<div class="modal-body customer-box">
+		<!-- Tab panes -->
+		<div class="tab-content">
+			<div class="tab-pane active" id="Login">
+				
+				<form method="POST" action="/categories/<%= categories[i].slug %>?_method=PUT" class="form-horizontal">
+					
+					<div class="form-group">
+						<div class="form-group">
+							<div class="col-sm-12">
+								<input type="text" name="name" value="<%= categories[i].name %>" class="form-control"  placeholder="Kategori İsmi">
+							</div>
+					</div>
+					
+						<div class="col-sm-10">
+							<button type="submit" class="btn btn-light btn-radius btn-brd grd1">
+								Oluştur
+							</button>
+							<button type="submit" class="btn btn-light btn-radius btn-brd grd1"
+								data-dismiss="modal" aria-hidden="true">
+								İptal Et
+							</button>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+	</div>
+	</div>
+	</div>
+										
+									</td>
+
+									<td><a href="/categories/<%= categories[i]._id %>?_method=DELETE" 
+										onclick="return confirm(' <%= categories[i].name %> adlı kategoriyi silmek istediğine emin misiniz?')"
+										class="btn btn-danger rounded-0 text-white"><span>Sil</span></a>
+									</td>
+								  </tr>
+							<% } %>
+								</tbody>
+							  </table>
+
+						</div><!-- end row -->
+
+
+					</div><!-- end container -->
+				</div><!-- end section -->
+
+				
+			<!-- ADD Modal -->
+			<div class="modal fade" id="addCategory" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+				<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+				<div class="modal-content">
+				<div class="modal-body customer-box">
+					<!-- Tab panes -->
+					<div class="tab-content">
+						<div class="tab-pane active" id="Login">
+							<form method="POST" action="/categories" class="form-horizontal">
+								<div class="form-group">
+									<div class="col-sm-12">
+										<input type="text" name="name" class="form-control"  placeholder="Kategori İsmi">
+									</div>
+								</div>
+						
+								<div class="row">
+									<div class="col-sm-10">
+										<button type="submit" class="btn btn-light btn-radius btn-brd grd1">
+											Oluştur
+										</button>
+										<button type="submit" class="btn btn-light btn-radius btn-brd grd1"
+											data-dismiss="modal" aria-hidden="true">
+											İptal
+										</button>
+									</div>
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+				</div>
+				</div>
+				</div>
+
+			<% } %>
+
+
+		<% } %>
+
+<%- include('partials/_footer'); %>
